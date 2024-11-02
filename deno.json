@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "lib": ["deno.window"]
+  },
+  "permissions": {
+    "net": true
+  },
+  "imports": {
+    "@atproto/api": "npm:@atproto/api@^0.13.12",
+    "@noble/hashes": "npm:@noble/hashes@^1.5.0",
+    "@nostrify/nostrify": "jsr:@nostrify/nostrify@^0.36.1",
+    "masto": "npm:masto@^6.10.1",
+    "nostr-tools": "npm:nostr-tools@^2.9.4",
+    "threads-api": "npm:threads-api@^1.6.3",
+    "twitter-api-v2": "npm:twitter-api-v2@^1.18.1"
+  }
+}
