@@ -1,5 +1,7 @@
 # yap - Yet Another Posting Tool
 
+NOTE: Threads integration is planned but not yet working
+
 `yap` is a command-line tool for posting messages to various text-based social media platforms simultaneously.
 
 ## Features
@@ -42,7 +44,7 @@ Refer to the included `.env.example` for a template of the environment variables
 Install `yap` with Deno's standard installation method:
 
 ```bash
-deno install -A -f --name yap https://your.repo.url/main.ts
+deno install -A -f --name yap https://raw.githubusercontent.com/moutansos/yap/refs/heads/main/main.ts
 ```
 
 Replace `https://your.repo.url/main.ts` with the actual URL hosting your `main.ts`.
