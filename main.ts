@@ -214,9 +214,15 @@ function parseFlags(): { twitter: boolean; mastodon: boolean; threads: boolean; 
 
 async function main() {
   const flags = parseFlags();
+  const posArgs = Deno.args.filter(arg => !["-all", "-twitter", "-mastodon", "-threads", "-bluesky", "-noster"].includes(arg));
+  if (posArgs.length === 0) {
+    console.error("Please provide a message to post.");
+    Deno.exit(1);
+  }
+  const message = posArgs.join(" ");
   const poster = new SocialCrossPost();
   await poster.init();
-  const results = await poster.crossPost("testing 123", flags);
+  const results = await poster.crossPost(message, flags);
   console.log(results);
 }
 
