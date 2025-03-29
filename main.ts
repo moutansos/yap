@@ -175,20 +175,48 @@ class SocialCrossPost {
   }
 }
 
-// Usagek
+function parseFlags(): { twitter: boolean; mastodon: boolean; threads: boolean; bluesky: boolean; nostr: boolean } {
+  const args = Deno.args;
+  let flags = {
+    twitter: false,
+    mastodon: false,
+    threads: false,
+    bluesky: false,
+    nostr: false,
+  };
+
+  if (args.includes("-all")) {
+    flags = { twitter: true, mastodon: true, threads: true, bluesky: true, nostr: true };
+  } else {
+    if (args.includes("-twitter")) {
+      flags.twitter = true;
+    }
+    if (args.includes("-mastodon")) {
+      flags.mastodon = true;
+    }
+    if (args.includes("-threads")) {
+      flags.threads = true;
+    }
+    if (args.includes("-bluesky")) {
+      flags.bluesky = true;
+    }
+    if (args.includes("-noster")) {
+      flags.nostr = true;
+    }
+  }
+
+  if (!flags.twitter && !flags.mastodon && !flags.threads && !flags.bluesky && !flags.nostr) {
+    console.error("At least one flag is required: -twitter, -mastodon, -threads, -bluesky, -noster, or -all");
+    Deno.exit(1);
+  }
+  return flags;
+}
+
 async function main() {
+  const flags = parseFlags();
   const poster = new SocialCrossPost();
   await poster.init();
-  const results = await poster.crossPost(
-    "it's yappening",
-    {
-      twitter: true,
-      mastodon: true,
-      threads: true,
-      bluesky: true,
-      nostr: true,
-    },
-  );
+  const results = await poster.crossPost("it's yappening", flags);
   console.log(results);
 }
 
