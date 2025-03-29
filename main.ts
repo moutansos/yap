@@ -216,7 +216,7 @@ async function main() {
   const flags = parseFlags();
   const poster = new SocialCrossPost();
   await poster.init();
-  const results = await poster.crossPost("it's yappening", flags);
+  const results = await poster.crossPost("testing 123", flags);
   console.log(results);
 }
 
