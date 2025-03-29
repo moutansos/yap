@@ -1,6 +1,6 @@
 # yap - Yet Another Posting Tool
 
-NOTE: Threads integration is planned but not yet working
+> NOTE: Threads integration is planned but not yet working
 
 `yap` is a command-line tool for posting messages to various text-based social media platforms simultaneously.
 
