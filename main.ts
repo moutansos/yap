@@ -8,7 +8,25 @@ import { Relay } from "nostr-tools/relay";
 import { config } from "https://deno.land/x/dotenv@v3.2.2/mod.ts";
 import { nip19 } from "nostr-tools";
 
+
 const env = config();
+
+function getEnv(name: string): string | undefined {
+  return env[name] || Deno.env.get(name);
+}
+
+const twitterApiKey = getEnv("TWITTER_API_KEY");
+const twitterApiSecret = getEnv("TWITTER_API_SECRET");
+const twitterApiAccessToken = getEnv("TWITTER_ACCESS_TOKEN");
+const twitterApiAccessSecret = getEnv("TWITTER_ACCESS_SECRET");
+
+const mastodonInstance = getEnv("MASTODON_INSTANCE");
+const mastodonAccessToken = getEnv("MASTODON_ACCESS_TOKEN");
+
+const blueskyEmail = getEnv("BLUESKY_EMAIL");
+const blueskyPassword = getEnv("BLUESKY_PASSWORD");
+
+const nosterPrivateKey = getEnv("NOSTR_PRIVATE_KEY");
 
 interface PostResult {
   twitter: boolean;
@@ -28,29 +46,29 @@ class SocialCrossPost {
   constructor() {
     // Twitter Auth
     if (
-      env.TWITTER_API_KEY &&
-      env.TWITTER_API_SECRET &&
-      env.TWITTER_ACCESS_TOKEN &&
-      env.TWITTER_ACCESS_SECRET
+      twitterApiKey &&
+      twitterApiSecret &&
+      twitterApiAccessToken &&
+      twitterApiAccessSecret
     ) {
       this.twitter = new TwitterApi({
-        appKey: env.TWITTER_API_KEY,
-        appSecret: env.TWITTER_API_SECRET,
-        accessToken: env.TWITTER_ACCESS_TOKEN,
-        accessSecret: env.TWITTER_ACCESS_SECRET,
+        appKey: twitterApiKey,
+        appSecret: twitterApiSecret,
+        accessToken: twitterApiAccessToken,
+        accessSecret: twitterApiAccessSecret,
       });
     }
 
     // Mastodon Auth
-    if (env.MASTODON_INSTANCE && env.MASTODON_ACCESS_TOKEN) {
+    if (mastodonInstance && mastodonAccessToken) {
       this.mastodon = createRestAPIClient({
-        url: env.MASTODON_INSTANCE,
-        accessToken: env.MASTODON_ACCESS_TOKEN,
+        url: mastodonInstance,
+        accessToken: mastodonAccessToken,
       });
     }
 
     // Bluesky Auth
-    if (env.BLUESKY_EMAIL && env.BLUESKY_PASSWORD) {
+    if (blueskyEmail && blueskyPassword) {
       this.bluesky = new AtpAgent({
         service: "https://bsky.social",
       });
@@ -62,14 +80,14 @@ class SocialCrossPost {
     //     password: env.THREADS_PASSWORD,
     // });
 
-    this.nostrKey = env.NOSTR_PRIVATE_KEY;
+    this.nostrKey = nosterPrivateKey;
   }
 
   async init(): Promise<void> {
-    if (this.bluesky) {
+    if (this.bluesky && blueskyEmail && blueskyPassword) {
       await this.bluesky.login({
-        identifier: env.BLUESKY_EMAIL,
-        password: env.BLUESKY_PASSWORD,
+        identifier: blueskyEmail,
+        password: blueskyPassword,
       });
     }
   }
@@ -216,7 +234,7 @@ async function main() {
   const flags = parseFlags();
   const posArgs = Deno.args.filter(arg => !["-all", "-twitter", "-mastodon", "-threads", "-bluesky", "-noster"].includes(arg));
   if (posArgs.length === 0) {
-    console.error("Please provide a message to post.");
+    console.error("Please provide a message to post in quotes.");
     Deno.exit(1);
   }
   const message = posArgs.join(" ");

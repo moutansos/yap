@@ -44,10 +44,9 @@ Refer to the included `.env.example` for a template of the environment variables
 Install `yap` with Deno's standard installation method:
 
 ```bash
-deno install -A -f --name yap https://raw.githubusercontent.com/moutansos/yap/refs/heads/main/main.ts
+git clone https://github.com/moutansos/yap
+deno install -A -f --name yap --global ./main.ts --confg deno.json
 ```
-
-Replace `https://your.repo.url/main.ts` with the actual URL hosting your `main.ts`.
 
 ## Usage
 
